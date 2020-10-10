@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// Open Connection
-	client, err := mongo.Connect(context.TODO(), "mongodb://$[username]:$[password]@$[hostlist]/$[database]?authSource=$[authSource]");
+	client, err := mongo.Connect(context.TODO(), "mongodb://]");
 
 	if err != nil {
 		log.Fatal(err)
