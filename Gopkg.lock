@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/aws/aws-sdk-go"
+  packages = ["aws","aws/awserr","aws/awsutil","aws/client/metadata","aws/credentials","aws/endpoints","aws/request","aws/signer/v4","internal/context","internal/ini","internal/sdkio","internal/sdkmath","internal/shareddefaults","internal/strings","internal/sync/singleflight","private/protocol","private/protocol/rest"]
+  revision = "c40a73ace9f6c873ca8743dcbe8c9d8df5091acb"
+  version = "v1.35.7"
+
+[[projects]]
   name = "github.com/go-stack/stack"
   packages = ["."]
   revision = "2fee6af1a9795aafbe0253a0cfbdf668e1fb8a9a"
@@ -14,10 +20,21 @@
   version = "v0.0.2"
 
 [[projects]]
-  name = "github.com/mongodb/mongo-go-driver"
-  packages = ["bson","bson/bsoncodec","bson/bsonrw","bson/bsontype","bson/primitive","event","internal","mongo","mongo/options","mongo/readconcern","mongo/readpref","mongo/writeconcern","tag","version","x/bsonx","x/bsonx/bsoncore","x/mongo/driver","x/mongo/driver/auth","x/mongo/driver/auth/internal/gssapi","x/mongo/driver/session","x/mongo/driver/topology","x/mongo/driver/uuid","x/network/address","x/network/command","x/network/compressor","x/network/connection","x/network/connstring","x/network/description","x/network/result","x/network/wiremessage"]
-  revision = "e1f3d104525e687eda76125707c9852e429f2730"
-  version = "v0.3.0"
+  name = "github.com/jmespath/go-jmespath"
+  packages = ["."]
+  revision = "c2b33e84"
+
+[[projects]]
+  name = "github.com/klauspost/compress"
+  packages = ["fse","huff0","snappy","zstd","zstd/internal/xxhash"]
+  revision = "06dfa05f34740a0ee7ad9932a6f65d523328e98e"
+  version = "v1.11.1"
+
+[[projects]]
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  revision = "614d223910a179a466c1767a985424175c39b465"
+  version = "v0.9.1"
 
 [[projects]]
   branch = "master"
@@ -32,15 +49,21 @@
   revision = "28ec3d652c6c3c08aa68bd84d66c2eed01327d2e"
 
 [[projects]]
+  name = "go.mongodb.org/mongo-driver"
+  packages = ["bson","bson/bsoncodec","bson/bsonoptions","bson/bsonrw","bson/bsontype","bson/primitive","event","internal","mongo","mongo/options","mongo/readconcern","mongo/readpref","mongo/writeconcern","tag","version","x/bsonx","x/bsonx/bsoncore","x/mongo/driver","x/mongo/driver/address","x/mongo/driver/auth","x/mongo/driver/auth/internal/gssapi","x/mongo/driver/connstring","x/mongo/driver/description","x/mongo/driver/dns","x/mongo/driver/mongocrypt","x/mongo/driver/mongocrypt/options","x/mongo/driver/ocsp","x/mongo/driver/operation","x/mongo/driver/session","x/mongo/driver/topology","x/mongo/driver/uuid","x/mongo/driver/wiremessage"]
+  revision = "140a982e2bad05fb469723ea9046c9699b3fe161"
+  version = "v1.4.2"
+
+[[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["pbkdf2"]
+  packages = ["ocsp","pbkdf2"]
   revision = "7f63de1d35b0f77fa2b9faea3e7deb402a2383c8"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sync"
-  packages = ["semaphore"]
+  packages = ["errgroup","semaphore"]
   revision = "b3e1573b75205f2905c4b27986413d2e2be9803c"
 
 [[projects]]
@@ -52,6 +75,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "0520bda0e880c04eff6bac2ea0b3930ddb3aa32922eb4160d514e26fa65b56c2"
+  inputs-digest = "2fc98fe81edc2a75bb007ca1e68b315c42bcf995cf4348c996597c74046bcd5c"
   solver-name = "gps-cdcl"
   solver-version = 1
