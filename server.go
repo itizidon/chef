@@ -9,8 +9,7 @@ import (
 
 func main() {
 	// Open Connection
-	client, err := mongo.Connect(context.TODO(), "mongodb://]");
-
+	client, err := mongo.Connect(context.TODO(), "mongodb://localhost:27017/chef-project");
 	if err != nil {
 		log.Fatal(err)
 	}
