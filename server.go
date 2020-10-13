@@ -20,6 +20,11 @@ type Podcast struct {
 	Tags   []string           `bson:"tags,omitempty"`
 }
 
+type User struct {
+	ID primitive.ObjectID `bson:"_id,omitempty`
+
+}
+
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -35,9 +40,8 @@ func main() {
 	defer cancel()
 	err = client.Ping(ctx, readpref.Primary())
 
-	database := client.Database("quickstart")
-	podcastsCollection := database.Collection("podcasts")
-	// episodesCollection := database.Collection("episodes")
+	database := client.Database("chef-project")
+	usersCollection := database.Collection("users")
 
 	podcast := Podcast{
     Title:  "The Polyglot Developer",
