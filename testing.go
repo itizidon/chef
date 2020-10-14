@@ -20,16 +20,6 @@ type Podcast struct {
 	Tags   []string           `bson:"tags,omitempty"`
 }
 
-type User struct {
-	ID primitive.ObjectID `bson:"_id,omitempty`
-	Username string `bson:"username,omitempty"`
-	Admin bool `bson:"admin,omitempty"`
-	Firstname string `bson:"firstname,omitempty"`
-	Lastname string `bson:"lastname,omitempty"`
-	Age int `bson:"age,omitempty"`
-	Email string `bson:"email,omitempty"`
-}
-
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -45,21 +35,20 @@ func main() {
 	defer cancel()
 	err = client.Ping(ctx, readpref.Primary())
 
-	database := client.Database("chef-project")
-	usersCollection := database.Collection("users")
+	database := client.Database("quickstart")
+	podcastsCollection := database.Collection("podcasts")
+	// episodesCollection := database.Collection("episodes")
 
-	user := User{
-    Username:  "itizidon",
-    Admin: true,
-		Firstname: "Don",
-		Lastname: "Ng",
-		Age: 24,
-		Email: "Don@email.com",
+	podcast := Podcast{
+    Title:  "The Polyglot Developer",
+    Author: "Nic Raboy",
+    Tags:   []string{"development", "programming", "coding"},
 }
 
-	insertResult, err :=usersCollection.InsertOne(ctx, user)
-
-
-	fmt.Println(insertResult.InsertedID)
+insertResult, err := podcastsCollection.InsertOne(ctx, podcast)
+if err != nil {
+    panic(err)
+}
+fmt.Println(insertResult.InsertedID)
 	http.ListenAndServe(":8080", nil)
 }
