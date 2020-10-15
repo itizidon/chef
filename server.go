@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	// "go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -48,6 +48,7 @@ func main() {
 	database := client.Database("chef-project")
 	usersCollection := database.Collection("users")
 
+	usersCollection.DeleteMany(ctx,bson.D{})
 	user := User{
     Username:  "itizidon",
     Admin: true,
