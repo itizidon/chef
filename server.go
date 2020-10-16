@@ -3,14 +3,17 @@ package main
 import (
 	"context"
 	"fmt"
-	// "log"
+	"log"
+	"io/ioutil"
 	"time"
 	"net/http"
+	// "encoding/json"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"github.com/gorilla/mux"
 )
 
 type Podcast struct {
@@ -60,7 +63,29 @@ func main() {
 
 	insertResult, err :=usersCollection.InsertOne(ctx, user)
 
+	r := mux.NewRouter()
+	r.HandleFunc("/",handler).Methods("GET")
 
+	r.HandleFunc("/lol",postHandler).Methods("POST")
+	// http.HandleFunc("/", handler)
 	fmt.Println(insertResult.InsertedID)
+
+	http.Handle("/", r)
 	http.ListenAndServe(":8080", nil)
+}
+
+func postHandler(w http.ResponseWriter, r *http.Request) {
+	// jsn, err := ioutil.ReadAll(r.Body)
+	if(err != nil){
+		log.Fatal("error", err)
+	}
+
+	// json.Unmarshal(jsn, m)
+	// fmt.Println(m)
+
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println(w)
 }
