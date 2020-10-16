@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"time"
 	"net/http"
-	// "encoding/json"
+	"encoding/json"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -75,13 +75,16 @@ func main() {
 }
 
 func postHandler(w http.ResponseWriter, r *http.Request) {
-	// jsn, err := ioutil.ReadAll(r.Body)
+	jsn, err := ioutil.ReadAll(r.Body)
 	if(err != nil){
 		log.Fatal("error", err)
 	}
 
-	// json.Unmarshal(jsn, m)
-	// fmt.Println(m)
+	var data map[string]interface{}
+
+	json.Unmarshal(jsn, &data)
+
+	fmt.Println(data)
 
 }
 
