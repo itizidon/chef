@@ -66,15 +66,31 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/",handler).Methods("GET")
 
-	r.HandleFunc("/lol",postHandler).Methods("POST")
-	// http.HandleFunc("/", handler)
+	r.HandleFunc("/new-user",newUserHandler).Methods("POST")
 	fmt.Println(insertResult.InsertedID)
 
 	http.Handle("/", r)
 	http.ListenAndServe(":8080", nil)
 }
 
-func postHandler(w http.ResponseWriter, r *http.Request) {
+func newUserHandler(w http.ResponseWriter, r *http.Request) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017/chef-project"))
+
+	defer func() {
+    if err = client.Disconnect(ctx); err != nil {
+        panic(err)
+    }
+	}()
+
+	ctx, cancel = context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	err = client.Ping(ctx, readpref.Primary())
+
+	database := client.Database("chef-project")
+	usersCollection := database.Collection("users")
 	jsn, err := ioutil.ReadAll(r.Body)
 	if(err != nil){
 		log.Fatal("error", err)
@@ -84,8 +100,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(jsn, &data)
 
-	fmt.Println(data)
-
+	usersCollection.InsertOne(ctx,data)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
