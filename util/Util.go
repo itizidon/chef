@@ -1,5 +1,9 @@
 package util
 
+import (
+	"fmt"
+)
+
 type Recipe struct {
   name string
   description string
