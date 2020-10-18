@@ -14,6 +14,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"github.com/gorilla/mux"
+	util "chef-project/util"
 )
 
 type Podcast struct {
@@ -66,19 +67,22 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/",handler).Methods("GET")
 
-	r.HandleFunc("/new-user",newUserHandler).Methods("POST")
+	r.HandleFunc("/newUser",newUserHandler).Methods("POST")
+	r.HandleFunc("/createRecipe", newRecipe).Methods("POST")
 	fmt.Println(insertResult.InsertedID)
 
 	http.Handle("/", r)
 	http.ListenAndServe(":8080", nil)
 }
 
-func newUserHandler(w http.ResponseWriter, r *http.Request) {
+func newRecipe(w http.ResponseWriter, r *http.Request){
 
+}
+
+func newUserHandler(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017/chef-project"))
-
 	defer func() {
     if err = client.Disconnect(ctx); err != nil {
         panic(err)
@@ -95,7 +99,6 @@ func newUserHandler(w http.ResponseWriter, r *http.Request) {
 	if(err != nil){
 		log.Fatal("error", err)
 	}
-
 	var data map[string]interface{}
 
 	json.Unmarshal(jsn, &data)
