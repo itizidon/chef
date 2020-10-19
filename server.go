@@ -17,15 +17,8 @@ import (
 	util "chef-project/util"
 )
 
-type Podcast struct {
-	ID     primitive.ObjectID `bson:"_id,omitempty"`
-	Title  string             `bson:"title,omitempty"`
-	Author string             `bson:"author,omitempty"`
-	Tags   []string           `bson:"tags,omitempty"`
-}
-
 type User struct {
-	ID primitive.ObjectID
+	ID primitive.ObjectID `bson:"_id,omitempty"`
 	Username string `bson:"username,omitempty"`
 	Admin bool `bson:"admin,omitempty"`
 	Firstname string `bson:"firstname,omitempty"`
@@ -111,7 +104,7 @@ func newUserHandler(w http.ResponseWriter, r *http.Request) {
 	if(err != nil){
 		log.Fatal("error", err)
 	}
-	var data map[string]interface{}
+	var data User
 
 	json.Unmarshal(jsn, &data)
 
