@@ -25,13 +25,14 @@ type Podcast struct {
 }
 
 type User struct {
-	ID primitive.ObjectID `bson:"_id,omitempty`
+	ID primitive.ObjectID
 	Username string `bson:"username,omitempty"`
 	Admin bool `bson:"admin,omitempty"`
 	Firstname string `bson:"firstname,omitempty"`
 	Lastname string `bson:"lastname,omitempty"`
 	Age int `bson:"age,omitempty"`
 	Email string `bson:"email,omitempty"`
+	Recipes util.List
 }
 
 func main() {
@@ -53,6 +54,16 @@ func main() {
 	usersCollection := database.Collection("users")
 
 	usersCollection.DeleteMany(ctx,bson.D{})
+
+	addRecipe := util.Recipe{
+		"pasta",
+		"mom's famous pasta",
+		500,
+	}
+
+	newRecipes := util.List{}
+	newRecipes.Insert(addRecipe)
+
 	user := User{
     Username:  "itizidon",
     Admin: true,
@@ -60,6 +71,7 @@ func main() {
 		Lastname: "Ng",
 		Age: 24,
 		Email: "Don@email.com",
+		Recipes: newRecipes,
 }
 
 	insertResult, err :=usersCollection.InsertOne(ctx, user)

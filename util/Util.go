@@ -5,75 +5,75 @@ import (
 )
 
 type Recipe struct {
-  name string
-  description string
-  price int
+  Name string
+  Description string
+  Price int
 }
 
 type Node struct {
-    prev *Node
-    next *Node
-    key  Recipe
+    Prev *Node
+    Next *Node
+    Key  Recipe
 }
 
 type List struct {
-    head *Node
-    tail *Node
+    Head *Node
+    Tail *Node
 }
 
-func (L *List) Insert(key Recipe) {
+func (L *List) Insert(Key Recipe) {
     list := &Node{
-        next: L.head,
-        key:  key,
+        Next: L.Head,
+        Key:  Key,
     }
-    if L.head != nil {
-        L.head.prev = list
+    if L.Head != nil {
+        L.Head.Prev = list
     }
-    L.head = list
+    L.Head = list
 
-    l := L.head
-    for l.next != nil {
-        l = l.next
+    l := L.Head
+    for l.Next != nil {
+        l = l.Next
     }
-    L.tail = l
+    L.Tail = l
 }
 
 func (l *List) Display() {
-    list := l.head
+    list := l.Head
     for list != nil {
-        fmt.Printf("%+v ->", list.key)
-        list = list.next
+        fmt.Printf("%+v ->", list.Key)
+        list = list.Next
     }
     fmt.Println()
 }
 
 func Display(list *Node) {
     for list != nil {
-        fmt.Printf("%v ->", list.key)
-        list = list.next
+        fmt.Printf("%v ->", list.Key)
+        list = list.Next
     }
     fmt.Println()
 }
 
 func ShowBackwards(list *Node) {
     for list != nil {
-        fmt.Printf("%v <-", list.key)
-        list = list.prev
+        fmt.Printf("%v <-", list.Key)
+        list = list.Prev
     }
     fmt.Println()
 }
 
 func (l *List) Reverse() {
-    curr := l.head
-    var prev *Node
-    l.tail = l.head
+    curr := l.Head
+    var Prev *Node
+    l.Tail = l.Head
 
     for curr != nil {
-        next := curr.next
-        curr.next = prev
-        prev = curr
-        curr = next
+        Next := curr.Next
+        curr.Next = Prev
+        Prev = curr
+        curr = Next
     }
-    l.head = prev
-    Display(l.head)
+    l.Head = Prev
+    Display(l.Head)
 }
