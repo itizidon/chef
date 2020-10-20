@@ -25,7 +25,16 @@ type User struct {
 	Lastname string `bson:"lastname,omitempty"`
 	Age int `bson:"age,omitempty"`
 	Email string `bson:"email,omitempty"`
-	Recipes util.List
+	Shop util.List
+}
+
+type AllRecipes struct {
+	ID primitive.ObjectID `bson:"_id,omitempty"`
+	UserID string `bson:"userid,omitempty"`
+	Recipename string `bson:"recipename,omitempty"`
+	Time int `bson:"time,omitempty"`
+	Ethnicity string `bson:"ethnicity,omitempty"`
+	Method string `bson:"method,omitempty"`
 }
 
 func main() {
@@ -54,8 +63,8 @@ func main() {
 		500,
 	}
 
-	newRecipes := util.List{}
-	newRecipes.Insert(addRecipe)
+	newShop := util.List{}
+	newShop.Insert(addRecipe)
 
 	user := User{
     Username:  "itizidon",
@@ -64,7 +73,7 @@ func main() {
 		Lastname: "Ng",
 		Age: 24,
 		Email: "Don@email.com",
-		Recipes: newRecipes,
+		Shop: newShop,
 }
 
 	insertResult, err :=usersCollection.InsertOne(ctx, user)
@@ -81,7 +90,31 @@ func main() {
 }
 
 func newRecipe(w http.ResponseWriter, r *http.Request){
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017/chef-project"))
+	defer func() {
+    if err = client.Disconnect(ctx); err != nil {
+        panic(err)
+    }
+	}()
 
+	ctx, cancel = context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	err = client.Ping(ctx, readpref.Primary())
+
+	database := client.Database("chef-project")
+	allRecipes := database.Collection("generalRecipes")
+	jsn, err := ioutil.ReadAll(r.Body)
+	if(err != nil){
+		log.Fatal("error", err)
+	}
+
+	var data AllRecipes
+
+	json.Unmarshal(jsn, &data)
+
+	allRecipes.InsertOne(ctx, data)
 }
 
 func newUserHandler(w http.ResponseWriter, r *http.Request) {
