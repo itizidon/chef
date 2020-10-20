@@ -114,7 +114,8 @@ func newRecipe(w http.ResponseWriter, r *http.Request){
 
 	json.Unmarshal(jsn, &data)
 
-	allRecipes.InsertOne(ctx, data)
+	recipeID, err :=allRecipes.InsertOne(ctx, data)
+	fmt.Println(recipeID)
 }
 
 func newUserHandler(w http.ResponseWriter, r *http.Request) {
