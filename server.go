@@ -187,7 +187,7 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 	json.Unmarshal(jsn, &data)
 
 	fmt.Println(bson.M{data.RecipeKey: data.RecipeType})
-	returnedRecipes, err := allRecipes.Find(ctx,bson.M{"recipename": "pho"})
+	returnedRecipes, err := allRecipes.Find(ctx,bson.M{data.RecipeKey: data.RecipeType})
 
 	var allRecipesParsed []bson.M
 	if err = returnedRecipes.All(ctx, &allRecipesParsed); err != nil {
