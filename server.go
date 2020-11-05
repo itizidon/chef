@@ -17,6 +17,11 @@ import (
 	util "chef-project/util"
 )
 
+type JavaScript struct {
+	Code  string
+	Scope interface{}
+}
+
 type User struct {
 	ID primitive.ObjectID `bson:"_id,omitempty"`
 	Username string `bson:"username,omitempty"`
@@ -26,6 +31,11 @@ type User struct {
 	Age int `bson:"age,omitempty"`
 	Email string `bson:"email,omitempty"`
 	Shop util.List
+}
+
+type RecipeQuery struct {
+	RecipeKey string `bson:"recipekey,omitempty"`
+	RecipeType string `bson:"recipetype,omitempty"`
 }
 
 type AllRecipes struct {
@@ -80,7 +90,7 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/",handler).Methods("GET")
-
+	r.HandleFunc("/getRecipes", getRecipes).Methods("POST")
 	r.HandleFunc("/newUser",newUserHandler).Methods("POST")
 	r.HandleFunc("/createRecipe", newRecipe).Methods("POST")
 	fmt.Println(insertResult.InsertedID)
@@ -148,4 +158,40 @@ func newUserHandler(w http.ResponseWriter, r *http.Request) {
 func handler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(w)
+}
+
+func getRecipes(w http.ResponseWriter, r *http.Request){
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017/chef-project"))
+	defer func() {
+    if err = client.Disconnect(ctx); err != nil {
+        panic(err)
+    }
+	}()
+
+	ctx, cancel = context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	err = client.Ping(ctx, readpref.Primary())
+
+	database := client.Database("chef-project")
+	allRecipes := database.Collection("generalRecipes")
+	jsn, err := ioutil.ReadAll(r.Body)
+	if(err != nil){
+		log.Fatal("error", err)
+	}
+
+
+	var data RecipeQuery
+	json.Unmarshal(jsn, &data)
+
+	fmt.Println(bson.M{data.RecipeKey: data.RecipeType})
+	returnedRecipes, err := allRecipes.Find(ctx,bson.M{"recipename": "pho"})
+
+	var allRecipesParsed []bson.M
+	if err = returnedRecipes.All(ctx, &allRecipesParsed); err != nil {
+    log.Fatal(err)
+}
+	fmt.Println(allRecipesParsed)
 }
