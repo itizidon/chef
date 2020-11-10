@@ -1,11 +1,7 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import React from 'react'
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import Home from './components/Home'
+import AllRecipes from './components/AllRecipes'
 
 export default function Routes() {
   return (
@@ -22,6 +18,9 @@ export default function Routes() {
             <li>
               <Link to="/users">Users</Link>
             </li>
+            <li>
+              <Link to="/recipes">Recipes</Link>
+            </li>
           </ul>
         </nav>
 
@@ -34,19 +33,22 @@ export default function Routes() {
           <Route path="/users">
             <Users />
           </Route>
+          <Route path="/recipes">
+            <AllRecipes />
+          </Route>
           <Route path="/">
             <Home />
           </Route>
         </Switch>
       </div>
     </Router>
-  );
+  )
 }
 
 function About() {
-  return <h2>About</h2>;
+  return <h2>About</h2>
 }
 
 function Users() {
-  return <h2>Users</h2>;
+  return <h2>Users</h2>
 }

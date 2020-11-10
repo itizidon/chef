@@ -17,11 +17,6 @@ import (
 	util "chef-project/util"
 )
 
-type JavaScript struct {
-	Code  string
-	Scope interface{}
-}
-
 type User struct {
 	ID primitive.ObjectID `bson:"_id,omitempty"`
 	Username string `bson:"username,omitempty"`
@@ -64,7 +59,17 @@ func main() {
 
 	database := client.Database("chef-project")
 	usersCollection := database.Collection("users")
+	generalRecipesCollection := database.Collection("generalRecipes")
 
+	seedRecipe:= AllRecipes{
+		UserID: "1",
+		Recipename: "pho",
+		Time: 500,
+		Ethnicity: "asian",
+		Method: "bbq",
+	}
+
+	generalRecipesCollection.DeleteMany(ctx, bson.D{})
 	usersCollection.DeleteMany(ctx,bson.D{})
 
 	addRecipe := util.Recipe{
@@ -86,6 +91,7 @@ func main() {
 		Shop: newShop,
 }
 
+	generalRecipesCollection.InsertOne(ctx, seedRecipe)
 	usersCollection.InsertOne(ctx, user)
 
 	r := mux.NewRouter()
@@ -93,7 +99,6 @@ func main() {
 	r.HandleFunc("/getRecipes", getRecipes).Methods("POST")
 	r.HandleFunc("/newUser",newUserHandler).Methods("POST")
 	r.HandleFunc("/createRecipe", newRecipe).Methods("POST")
-
 	http.Handle("/", r)
 	http.ListenAndServe(":8080", nil)
 }
@@ -114,14 +119,14 @@ func newRecipe(w http.ResponseWriter, r *http.Request){
 
 	database := client.Database("chef-project")
 	allRecipes := database.Collection("generalRecipes")
-	jsn, err := ioutil.ReadAll(r.Body)
-	if(err != nil){
-		log.Fatal("error", err)
-	}
 
 	var data AllRecipes
 
-	json.Unmarshal(jsn, &data)
+	json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	allRecipes.InsertOne(ctx, data)
 }
@@ -142,13 +147,12 @@ func newUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	database := client.Database("chef-project")
 	usersCollection := database.Collection("users")
-	jsn, err := ioutil.ReadAll(r.Body)
-	if(err != nil){
-		log.Fatal("error", err)
-	}
 	var data User
-
-	json.Unmarshal(jsn, &data)
+	json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	usersCollection.InsertOne(ctx,data)
 }
@@ -175,11 +179,17 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 
 	database := client.Database("chef-project")
 	allRecipes := database.Collection("generalRecipes")
+
+	var test RecipeQuery
+
+	json.NewDecoder(r.Body).Decode(&test)
+
+	fmt.Println(test.RecipeKey)
+
 	jsn, err := ioutil.ReadAll(r.Body)
 	if(err != nil){
 		log.Fatal("error", err)
 	}
-
 
 	var data RecipeQuery
 	json.Unmarshal(jsn, &data)
@@ -189,12 +199,7 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 	var allRecipesParsed []bson.M
 	if err = returnedRecipes.All(ctx, &allRecipesParsed); err != nil {
     log.Fatal(err)
-}
+	}
 
-
-	// fmt.Println(allRecipes.Find(ctx, bson.M{}))
-	// fmt.Println(allRecipesParsed)
 	json.NewEncoder(w).Encode(allRecipesParsed)
-
-	// fmt.Fprintf(w, allRecipesParsed)
 }
