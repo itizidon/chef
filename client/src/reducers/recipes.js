@@ -12,6 +12,7 @@ export const getRecipesThunk = recipeInfo => {
       'http://localhost:8080/getRecipes',
       recipeInfo
     )
+    console.log(data)
     dispatch(getRecipes(data))
   }
 }

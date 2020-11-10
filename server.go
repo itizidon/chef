@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"io/ioutil"
+	// "io/ioutil"
 	"time"
 	"net/http"
 	"encoding/json"
@@ -180,20 +180,9 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 	database := client.Database("chef-project")
 	allRecipes := database.Collection("generalRecipes")
 
-	var test RecipeQuery
-
-	json.NewDecoder(r.Body).Decode(&test)
-
-	fmt.Println(test.RecipeKey)
-
-	jsn, err := ioutil.ReadAll(r.Body)
-	if(err != nil){
-		log.Fatal("error", err)
-	}
-
 	var data RecipeQuery
-	json.Unmarshal(jsn, &data)
 
+	json.NewDecoder(r.Body).Decode(&data)
 	returnedRecipes, err := allRecipes.Find(ctx,bson.M{data.RecipeKey: data.RecipeType})
 
 	var allRecipesParsed []bson.M

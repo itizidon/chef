@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+import { getRecipesThunk } from '../reducers/recipes'
 
-const AllRecipes = (props)=>{
+const AllRecipes = (props) => {
   console.log(props)
-return(
-  <div>All Recipes</div>
-)
+  useEffect(() => {
+    props.getAllRecipes()
+  }, [])
+  return <div>All Recipes</div>
 }
 
-const mapStateToProps = state => ({
-  state
+const mapStateToProps = (state) => ({
+  state,
 })
 
-
-export default connect(mapStateToProps, null)(AllRecipes)
+const mapDispatchToProps = (dispatch) => ({
+  getAllRecipes: () => dispatch(getRecipesThunk()),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(AllRecipes)
