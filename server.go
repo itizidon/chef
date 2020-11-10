@@ -86,14 +86,13 @@ func main() {
 		Shop: newShop,
 }
 
-	insertResult, err :=usersCollection.InsertOne(ctx, user)
+	usersCollection.InsertOne(ctx, user)
 
 	r := mux.NewRouter()
 	r.HandleFunc("/",handler).Methods("GET")
 	r.HandleFunc("/getRecipes", getRecipes).Methods("POST")
 	r.HandleFunc("/newUser",newUserHandler).Methods("POST")
 	r.HandleFunc("/createRecipe", newRecipe).Methods("POST")
-	fmt.Println(insertResult.InsertedID)
 
 	http.Handle("/", r)
 	http.ListenAndServe(":8080", nil)
@@ -124,8 +123,7 @@ func newRecipe(w http.ResponseWriter, r *http.Request){
 
 	json.Unmarshal(jsn, &data)
 
-	recipeID, err :=allRecipes.InsertOne(ctx, data)
-	fmt.Println(recipeID)
+	allRecipes.InsertOne(ctx, data)
 }
 
 func newUserHandler(w http.ResponseWriter, r *http.Request) {
@@ -157,7 +155,7 @@ func newUserHandler(w http.ResponseWriter, r *http.Request) {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println(w)
+
 }
 
 func getRecipes(w http.ResponseWriter, r *http.Request){
@@ -186,12 +184,17 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 	var data RecipeQuery
 	json.Unmarshal(jsn, &data)
 
-	fmt.Println(bson.M{data.RecipeKey: data.RecipeType})
 	returnedRecipes, err := allRecipes.Find(ctx,bson.M{data.RecipeKey: data.RecipeType})
 
 	var allRecipesParsed []bson.M
 	if err = returnedRecipes.All(ctx, &allRecipesParsed); err != nil {
     log.Fatal(err)
 }
-	fmt.Println(allRecipesParsed)
+
+
+	// fmt.Println(allRecipes.Find(ctx, bson.M{}))
+	// fmt.Println(allRecipesParsed)
+	json.NewEncoder(w).Encode(allRecipesParsed)
+
+	// fmt.Fprintf(w, allRecipesParsed)
 }
