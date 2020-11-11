@@ -1,29 +1,29 @@
 import axios from 'axios'
 const GET_RECIPES = 'GET_RECIPES'
 
-const getRecipes = userInfo => ({
+const getRecipes = (userInfo) => ({
   type: GET_RECIPES,
-  userInfo
+  userInfo,
 })
 
-export const getRecipesThunk = recipeInfo => {
-  return async dispatch => {
-    const { data } = await axios.post(
-      'http://localhost:8080/getRecipes',
-      recipeInfo
-    )
-    console.log(data)
+export const getRecipesThunk = (recipeInfo) => {
+  return async (dispatch) => {
+    const { data } = await axios.post('http://localhost:8080/getRecipes', {
+      RecipeKey: 'recipename',
+      RecipeType: 'pho',
+    })
+    console.log(data, 'this is data')
     dispatch(getRecipes(data))
   }
 }
 
 export default (state = {}, action) => {
   switch (action.type) {
-   case GET_RECIPES:
-    return {
-     result: action.payload
-    }
-   default:
-    return state
+    case GET_RECIPES:
+      return {
+        result: action.payload,
+      }
+    default:
+      return state
   }
- }
+}

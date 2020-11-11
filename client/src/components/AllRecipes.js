@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { getRecipesThunk } from '../reducers/recipes'
 
 const AllRecipes = (props) => {
-  console.log(props)
   useEffect(() => {
+    console.log(props, 'this is props')
     props.getAllRecipes()
   }, [])
   return <div>All Recipes</div>

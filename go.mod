@@ -6,6 +6,7 @@ require (
 	github.com/aws/aws-sdk-go v1.35.7 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.2 // indirect
+	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/klauspost/compress v1.11.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect

@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
+	// "fmt"
 	"log"
 	// "io/ioutil"
 	"time"
@@ -14,6 +14,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"github.com/gorilla/mux"
+	gohandlers "github.com/gorilla/handlers"
 	util "chef-project/util"
 )
 
@@ -100,7 +101,9 @@ func main() {
 	r.HandleFunc("/newUser",newUserHandler).Methods("POST")
 	r.HandleFunc("/createRecipe", newRecipe).Methods("POST")
 	http.Handle("/", r)
-	http.ListenAndServe(":8080", nil)
+
+	ch := gohandlers.CORS(gohandlers.AllowedOrigins([]string{"http://localhost:3000"}))
+	http.ListenAndServe(":8080", ch(r))
 }
 
 func newRecipe(w http.ResponseWriter, r *http.Request){
