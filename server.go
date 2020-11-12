@@ -102,8 +102,12 @@ func main() {
 	r.HandleFunc("/createRecipe", newRecipe).Methods("POST")
 	http.Handle("/", r)
 
-	ch := gohandlers.CORS(gohandlers.AllowedOrigins([]string{"http://localhost:3000"}))
-	http.ListenAndServe(":8080", ch(r))
+	ch := gohandlers.CORS(
+		gohandlers.AllowedOrigins([]string{"http://localhost:3000"}),
+		gohandlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"}),
+		gohandlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}))(r)
+
+	http.ListenAndServe(":8080", ch)
 }
 
 func newRecipe(w http.ResponseWriter, r *http.Request){
