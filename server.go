@@ -190,12 +190,24 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 	var data RecipeQuery
 
 	json.NewDecoder(r.Body).Decode(&data)
-	returnedRecipes, err := allRecipes.Find(ctx,bson.M{data.RecipeKey: data.RecipeType})
 
-	var allRecipesParsed []bson.M
-	if err = returnedRecipes.All(ctx, &allRecipesParsed); err != nil {
-    log.Fatal(err)
+	if data.RecipeKey == "get all" {
+		returnedRecipes, err := allRecipes.Find(ctx,bson.M{})
+
+		var allRecipesParsed []bson.M
+		if err = returnedRecipes.All(ctx, &allRecipesParsed); err != nil {
+			log.Fatal(err)
+		}
+
+		json.NewEncoder(w).Encode(allRecipesParsed)
+	} else {
+		returnedRecipes, err := allRecipes.Find(ctx,bson.M{data.RecipeKey: data.RecipeType})
+
+		var allRecipesParsed []bson.M
+		if err = returnedRecipes.All(ctx, &allRecipesParsed); err != nil {
+			log.Fatal(err)
+		}
+
+		json.NewEncoder(w).Encode(allRecipesParsed)
 	}
-
-	json.NewEncoder(w).Encode(allRecipesParsed)
 }
