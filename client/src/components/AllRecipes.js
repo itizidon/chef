@@ -1,13 +1,24 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { getRecipesThunk } from '../reducers/recipes'
+import FilterForm from './FilterForm'
 
 const AllRecipes = (props) => {
+  const [recipes, setRecipes] = useState({ RecipeKey: 'get all' })
+
+  const updateRecipes = (filters) => {
+    setRecipes(filters)
+  }
+
   useEffect(() => {
-    console.log(props, 'this is props')
-    props.getAllRecipes({RecipeKey: "get all"})
+    props.getAllRecipes(recipes)
   }, [])
-  return <div>All Recipes</div>
+  return (
+    <div>
+      <div>All Recipes</div>
+      <FilterForm updateRecipes={updateRecipes}></FilterForm>
+    </div>
+  )
 }
 
 const mapStateToProps = (state) => ({
