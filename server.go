@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	// "fmt"
+	"fmt"
 	"log"
 	// "io/ioutil"
 	"time"
@@ -32,6 +32,16 @@ type User struct {
 type RecipeQuery struct {
 	RecipeKey string `bson:"recipekey,omitempty"`
 	RecipeType string `bson:"recipetype,omitempty"`
+}
+
+type RecipeInfo struct {
+	ID primitive.ObjectID `bson:"_id,omitempty"`
+	UserID string `bson:"userid,omitempty"`
+	Recipename string `bson:"recipename,omitempty"`
+	Time int `bson:"time,omitempty"`
+	Ethnicity string `bson:"ethnicity,omitempty"`
+	Method string `bson:"method,omitempty"`
+	RecipeKey string `bson:"recipekey,omitempty"`
 }
 
 type AllRecipes struct {
@@ -187,7 +197,7 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 	database := client.Database("chef-project")
 	allRecipes := database.Collection("generalRecipes")
 
-	var data RecipeQuery
+	var data RecipeInfo
 
 	json.NewDecoder(r.Body).Decode(&data)
 
@@ -201,8 +211,9 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 
 		json.NewEncoder(w).Encode(allRecipesParsed)
 	} else {
-		returnedRecipes, err := allRecipes.Find(ctx,bson.M{data.RecipeKey: data.RecipeType})
+		returnedRecipes, err := allRecipes.Find(ctx,bson.M{"recipename": data.Recipename, "ethnicity": data.Ethnicity})
 
+		fmt.Println(data.Recipename, data.Ethnicity)
 		var allRecipesParsed []bson.M
 		if err = returnedRecipes.All(ctx, &allRecipesParsed); err != nil {
 			log.Fatal(err)
