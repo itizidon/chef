@@ -35,16 +35,6 @@ type RecipeQuery struct {
 	RecipeType string `bson:"recipetype,omitempty"`
 }
 
-type RecipeInfo struct {
-	ID primitive.ObjectID `bson:"_id,omitempty"`
-	UserID string `bson:"userid,omitempty"`
-	Recipename string `bson:"recipename,omitempty"`
-	Time int `bson:"time,omitempty"`
-	Ethnicity string `bson:"ethnicity,omitempty"`
-	Method string `bson:"method,omitempty"`
-	RecipeKey string `bson:"recipekey,omitempty"`
-}
-
 type AllRecipes struct {
 	ID primitive.ObjectID `bson:"_id,omitempty"`
 	UserID string `bson:"userid,omitempty"`
@@ -212,10 +202,9 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 
 		json.NewEncoder(w).Encode(allRecipesParsed)
 	} else {
-		util.Queryify(data)
-		searchRecipe := bson.M{}
-		// fmt.Println(searchRecipe2, "testing")
 
+		searchRecipe := util.Queryify(data)
+		fmt.Println(searchRecipe)
 		returnedRecipes, err := allRecipes.Find(ctx,searchRecipe)
 
 		fmt.Println(data.Recipename, data.Ethnicity)

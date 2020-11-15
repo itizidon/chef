@@ -91,24 +91,23 @@ func (l *List) Reverse() {
     Display(l.Head)
 }
 
-func Queryify(data *RecipeInfo) {
+func Queryify(data *RecipeInfo) bson.M{
     result := bson.M{}
 
-    if data.UserID != "nil" {
+    if data.UserID != "" {
         result["userid"] = data.UserID
     }
-    if data.Recipename != "nil" {
+    if data.Recipename != "" {
         result["recipename"] = data.Recipename
     }
-    if data.Ethnicity != "nil" {
+    if data.Ethnicity != "" {
         result["ethnicity"] = data.Ethnicity
     }
-    if data.Method != "nil" {
+    if data.Method != "" {
         result["method"] = data.Method
     }
     if data.Time != 0 {
         result["time"] = data.Time
     }
-    fmt.Println(result)
-    // return result
+    return result
 }
