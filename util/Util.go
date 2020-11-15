@@ -1,8 +1,21 @@
 package util
 
 import (
-	"fmt"
+    "fmt"
+    "go.mongodb.org/mongo-driver/bson"
+    "go.mongodb.org/mongo-driver/bson/primitive"
+
 )
+
+type RecipeInfo struct {
+	ID primitive.ObjectID `bson:"_id,omitempty"`
+	UserID string `bson:"userid,omitempty"`
+	Recipename string `bson:"recipename,omitempty"`
+	Time int `bson:"time,omitempty"`
+	Ethnicity string `bson:"ethnicity,omitempty"`
+	Method string `bson:"method,omitempty"`
+	RecipeKey string `bson:"recipekey,omitempty"`
+}
 
 type Recipe struct {
   Name string
@@ -76,4 +89,26 @@ func (l *List) Reverse() {
     }
     l.Head = Prev
     Display(l.Head)
+}
+
+func Queryify(data *RecipeInfo) {
+    result := bson.M{}
+
+    if data.UserID != "nil" {
+        result["userid"] = data.UserID
+    }
+    if data.Recipename != "nil" {
+        result["recipename"] = data.Recipename
+    }
+    if data.Ethnicity != "nil" {
+        result["ethnicity"] = data.Ethnicity
+    }
+    if data.Method != "nil" {
+        result["method"] = data.Method
+    }
+    if data.Time != 0 {
+        result["time"] = data.Time
+    }
+    fmt.Println(result)
+    // return result
 }

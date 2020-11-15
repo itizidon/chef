@@ -16,6 +16,7 @@ import (
 	"github.com/gorilla/mux"
 	gohandlers "github.com/gorilla/handlers"
 	util "chef-project/util"
+
 )
 
 type User struct {
@@ -197,7 +198,7 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 	database := client.Database("chef-project")
 	allRecipes := database.Collection("generalRecipes")
 
-	var data RecipeInfo
+	var data *util.RecipeInfo
 
 	json.NewDecoder(r.Body).Decode(&data)
 
@@ -211,7 +212,11 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 
 		json.NewEncoder(w).Encode(allRecipesParsed)
 	} else {
-		returnedRecipes, err := allRecipes.Find(ctx,bson.M{"recipename": data.Recipename, "ethnicity": data.Ethnicity})
+		util.Queryify(data)
+		searchRecipe := bson.M{}
+		// fmt.Println(searchRecipe2, "testing")
+
+		returnedRecipes, err := allRecipes.Find(ctx,searchRecipe)
 
 		fmt.Println(data.Recipename, data.Ethnicity)
 		var allRecipesParsed []bson.M
