@@ -67,8 +67,6 @@ func main() {
 
 	seedData := []AllRecipes{{UserID: "1", Recipename: "Pho", Time: 200, Ethnicity: "Viet", Method: "Broth"},{UserID: "2", Recipename: "Burger", Time: 200, Ethnicity: "American", Method: "BBQ"},{UserID: "3", Recipename: "Fish", Time: 500, Ethnicity: "American", Method: "Grill"}, {UserID:"4", Recipename: "Fries", Time: 200, Ethnicity: "American", Method: "Deep Fry"}, {UserID: "5",Recipename: "Sushi", Time: 300, Ethnicity: "Japanese"}, {UserID: "6", Recipename: "Wonton", Time: 400, Ethnicity:"Chinese"}}
 
-
-
 	generalRecipesCollection.DeleteMany(ctx, bson.D{})
 	usersCollection.DeleteMany(ctx,bson.D{})
 
