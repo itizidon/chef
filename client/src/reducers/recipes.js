@@ -9,7 +9,6 @@ const getRecipes = (userInfo) => ({
 export const getRecipesThunk = (recipeInfo) => {
   return async (dispatch) => {
     const { data } = await axios.post('http://localhost:8080/getRecipes', recipeInfo)
-    console.log(data, 'this is data')
     dispatch(getRecipes(data))
   }
 }

@@ -63,13 +63,11 @@ func main() {
 	usersCollection := database.Collection("users")
 	generalRecipesCollection := database.Collection("generalRecipes")
 
-	seedRecipe:= AllRecipes{
-		UserID: "1",
-		Recipename: "pho",
-		Time: 500,
-		Ethnicity: "asian",
-		Method: "bbq",
-	}
+
+
+	seedData := []AllRecipes{{UserID: "1", Recipename: "Pho", Time: 200, Ethnicity: "Viet", Method: "Broth"},{UserID: "2", Recipename: "Burger", Time: 200, Ethnicity: "American", Method: "BBQ"},{UserID: "3", Recipename: "Fish", Time: 500, Ethnicity: "American", Method: "Grill"}, {UserID:"4", Recipename: "Fries", Time: 200, Ethnicity: "American", Method: "Deep Fry"}, {UserID: "5",Recipename: "Sushi", Time: 300, Ethnicity: "Japanese"}, {UserID: "6", Recipename: "Wonton", Time: 400, Ethnicity:"Chinese"}}
+
+
 
 	generalRecipesCollection.DeleteMany(ctx, bson.D{})
 	usersCollection.DeleteMany(ctx,bson.D{})
@@ -93,8 +91,18 @@ func main() {
 		Shop: newShop,
 }
 
-	generalRecipesCollection.InsertOne(ctx, seedRecipe)
+
 	usersCollection.InsertOne(ctx, user)
+	for i := 0; i < len(seedData); i++ {
+		seedRecipe:= AllRecipes{
+			UserID: seedData[i].UserID,
+			Recipename: seedData[i].Recipename,
+			Time: seedData[i].Time,
+			Ethnicity: seedData[i].Ethnicity,
+			Method: seedData[i].Method,
+		}
+		generalRecipesCollection.InsertOne(ctx, seedRecipe)
+	}
 
 	r := mux.NewRouter()
 	r.HandleFunc("/",handler).Methods("GET")

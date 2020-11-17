@@ -16,7 +16,7 @@ const AllRecipes = (props) => {
   return (
     <div>
       <div>All Recipes</div>
-      <FilterForm updateRecipes={updateRecipes}></FilterForm>
+      <FilterForm updateRecipes={updateRecipes} ></FilterForm>
     </div>
   )
 }
