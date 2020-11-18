@@ -240,18 +240,24 @@ func getTags (w http.ResponseWriter, r *http.Request){
 	database := client.Database("chef-project")
 	allRecipes := database.Collection("generalRecipes")
 
-	// matchStage := bson.D{{"$match", bson.D{{"recipename",bson.D{{"$exists",true}}}}}}
+	groupStage := bson.M{"$group": bson.M{
+		"_id": nil,
+		"recipename": bson.M{
+			"$addToSet": "$recipename",
+		},
+	}}
 
-	// groupStage := bson.D{{"$group", bson.D{{"recipename",bson.D{{"$exists",true}}, {"$total", bson.D{{"$addToSet", "$recipename"}}}}}}}
+	operations := []bson.M{groupStage}
 
-	// showInfoCursor, err := allRecipes.Aggregate(ctx, groupStage)
+	test, err := allRecipes.Aggregate(ctx, operations)
 
-	// fmt.Println(showInfoCursor)
-	returnedTags, err := allRecipes.Find(ctx,bson.M{})
-	var allTagsParsed []bson.M
-	if err = returnedTags.All(ctx, &allTagsParsed); err != nil {
-		log.Fatal(err)
+	if err != nil {
+    panic(err)
 	}
+	var showsWithInfo []bson.M
 
-	json.NewEncoder(w).Encode(allTagsParsed)
+	if err = test.All(ctx, &showsWithInfo); err != nil {
+    panic(err)
+	}
+	json.NewEncoder(w).Encode(showsWithInfo)
 }
