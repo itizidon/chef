@@ -107,6 +107,7 @@ func main() {
 	r.HandleFunc("/getRecipes", getRecipes).Methods("POST")
 	r.HandleFunc("/newUser",newUserHandler).Methods("POST")
 	r.HandleFunc("/createRecipe", newRecipe).Methods("POST")
+	r.HandleFunc("/getTags", getTags).Methods("GET")
 	http.Handle("/", r)
 
 	ch := gohandlers.CORS(
@@ -177,7 +178,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getRecipes(w http.ResponseWriter, r *http.Request){
-
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017/chef-project"))
@@ -221,4 +221,37 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 
 		json.NewEncoder(w).Encode(allRecipesParsed)
 	}
+}
+
+func getTags (w http.ResponseWriter, r *http.Request){
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017/chef-project"))
+	defer func() {
+    if err = client.Disconnect(ctx); err != nil {
+        panic(err)
+    }
+	}()
+
+	ctx, cancel = context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	err = client.Ping(ctx, readpref.Primary())
+
+	database := client.Database("chef-project")
+	allRecipes := database.Collection("generalRecipes")
+
+	// matchStage := bson.D{{"$match", bson.D{{"recipename",bson.D{{"$exists",true}}}}}}
+
+	// groupStage := bson.D{{"$group", bson.D{{"recipename",bson.D{{"$exists",true}}, {"$total", bson.D{{"$addToSet", "$recipename"}}}}}}}
+
+	// showInfoCursor, err := allRecipes.Aggregate(ctx, groupStage)
+
+	// fmt.Println(showInfoCursor)
+	returnedTags, err := allRecipes.Find(ctx,bson.M{})
+	var allTagsParsed []bson.M
+	if err = returnedTags.All(ctx, &allTagsParsed); err != nil {
+		log.Fatal(err)
+	}
+
+	json.NewEncoder(w).Encode(allTagsParsed)
 }

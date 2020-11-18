@@ -23,7 +23,7 @@ const AllRecipes = (props) => {
     fetchingData()
 
   }, [])
-  console.log(allData)
+
   return (
     <div>
       <div>All Recipes</div>
