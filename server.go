@@ -242,8 +242,14 @@ func getTags (w http.ResponseWriter, r *http.Request){
 
 	groupStage := bson.M{"$group": bson.M{
 		"_id": nil,
-		"recipename": bson.M{
+		"recipename": bson.M {
 			"$addToSet": "$recipename",
+		},
+		"ethnicity": bson.M {
+			"$addToSet": "$ethnicity",
+		},
+		"time": bson.M {
+			"$addToSet": "$time",
 		},
 	}}
 
