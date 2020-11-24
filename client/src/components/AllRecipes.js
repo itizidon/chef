@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { getRecipesThunk } from '../reducers/recipes'
 import FilterForm from './FilterForm'
 import axios from 'axios'
+import FilteredRecipes from './FilteredRecipes'
 
 const AllRecipes = (props) => {
   const [recipes, setRecipes] = useState({ RecipeKey: 'get all' })
@@ -28,7 +29,9 @@ const AllRecipes = (props) => {
     <div>
       <div>All Recipes</div>
       <FilterForm updateRecipes={updateRecipes}></FilterForm>
+      <FilteredRecipes displayRecipes={allData}></FilteredRecipes>
     </div>
+
   )
 }
 

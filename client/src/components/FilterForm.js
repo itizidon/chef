@@ -5,7 +5,6 @@ const FilterForm = ({ updateRecipes }) => {
   const [filter, setFilter] = useState({ RecipeKey: 'get all' })
 
   const [tags, setTags] = useState([])
-  // const [isGoing, setIsGoing] = useState()
 
   useEffect(() => {
     async function fetchingTags() {
