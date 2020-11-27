@@ -4,6 +4,10 @@ import axios from 'axios'
 const FilterForm = ({ updateRecipes }) => {
   const [filter, setFilter] = useState({ RecipeKey: 'get all' })
 
+  const [checkedEthnicity, setCheckedEthnicity] = useState()
+  const [checkedRecipename, setCheckedRecipename] = useState()
+  const [checkedTime, setCheckedTime] = useState()
+
   const [tags, setTags] = useState([])
 
   useEffect(() => {
@@ -24,7 +28,12 @@ const FilterForm = ({ updateRecipes }) => {
             return (
               <label key={inx}>
                 {cur}
-                <input name="Ethnicity" type="checkbox" />
+                <input
+                  name="Ethnicity"
+                  checked={checkedEthnicity === inx}
+                  onChange={() => setCheckedEthnicity(inx)}
+                  type="checkbox"
+                />
               </label>
             )
           })}
@@ -33,7 +42,12 @@ const FilterForm = ({ updateRecipes }) => {
             return (
               <label key={inx}>
                 {cur}
-                <input name="Recipename" type="checkbox" />
+                <input
+                  name="Recipename"
+                  checked={checkedRecipename === inx}
+                  onChange={() => setCheckedRecipename(inx)}
+                  type="checkbox"
+                />
               </label>
             )
           })}
@@ -42,7 +56,9 @@ const FilterForm = ({ updateRecipes }) => {
             return (
               <label key={inx}>
                 {cur}
-                <input name="time" type="checkbox" />
+                <input name="time"
+                checked={checkedTime === inx}
+                onChange={() => setCheckedTime(inx)}type="checkbox" />
               </label>
             )
           })}
