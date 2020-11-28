@@ -9,11 +9,11 @@ import (
 
 type RecipeInfo struct {
 	ID primitive.ObjectID `bson:"_id,omitempty"`
-	UserID string `bson:"userid,omitempty"`
-	Recipename string `bson:"recipename,omitempty"`
-	Time int `bson:"time,omitempty"`
-	Ethnicity string `bson:"ethnicity,omitempty"`
-	Method string `bson:"method,omitempty"`
+	UserID []string `bson:"userid,omitempty"`
+	Recipename []string `bson:"recipename,omitempty"`
+	Time []int `bson:"time,omitempty"`
+	Ethnicity []string `bson:"ethnicity,omitempty"`
+	Method []string `bson:"method,omitempty"`
 	RecipeKey string `bson:"recipekey,omitempty"`
 }
 
@@ -92,22 +92,27 @@ func (l *List) Reverse() {
 }
 
 func Queryify(data *RecipeInfo) bson.M{
-    result := bson.M{}
+    result := bson.M{
+        "_id": nil,
+        "userid": bson.M{
+            "$in": data.UserID,
+        },
+        "recipename": bson.M{
+            "$in": data.Recipename,
+        },
+        "ethnicity": bson.M{
+            "$in": data.Ethnicity,
+        },
+        "method": bson.M{
+            "$in": data.Method,
+        },
+        "time": bson.M{
+            "$in": data.Time,
+        },
+    }
 
-    if data.UserID != "" {
-        result["userid"] = data.UserID
-    }
-    if data.Recipename != "" {
-        result["recipename"] = data.Recipename
-    }
-    if data.Ethnicity != "" {
-        result["ethnicity"] = data.Ethnicity
-    }
-    if data.Method != "" {
-        result["method"] = data.Method
-    }
-    if data.Time != 0 {
-        result["time"] = data.Time
-    }
+    // if data.Ethnicity != "" {
+    //     result["ethnicity"] = data.Ethnicity
+    // }
     return result
 }

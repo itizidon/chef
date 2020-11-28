@@ -197,7 +197,7 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 	var data *util.RecipeInfo
 
 	json.NewDecoder(r.Body).Decode(&data)
-
+	fmt.Println(data)
 	if data.RecipeKey == "get all" {
 		returnedRecipes, err := allRecipes.Find(ctx,bson.M{})
 
@@ -212,8 +212,6 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 		searchRecipe := util.Queryify(data)
 		fmt.Println(searchRecipe)
 		returnedRecipes, err := allRecipes.Find(ctx,searchRecipe)
-
-		fmt.Println(data.Recipename, data.Ethnicity)
 		var allRecipesParsed []bson.M
 		if err = returnedRecipes.All(ctx, &allRecipesParsed); err != nil {
 			log.Fatal(err)
