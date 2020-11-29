@@ -91,28 +91,47 @@ func (l *List) Reverse() {
     Display(l.Head)
 }
 
+func appendToQuery(arr []string) bson.A{
+    var data bson.A
+    for _,v := range arr{
+        data = append(data,v)
+    }
+    return data
+}
+
+func appendToQueryInt(arr []int) bson.A{
+    var data bson.A
+    for _,v := range arr{
+        data = append(data,v)
+    }
+    return data
+}
 func Queryify(data *RecipeInfo) bson.M{
-    result := bson.M{
-        "_id": nil,
-        "userid": bson.M{
-            "$in": data.UserID,
-        },
-        "recipename": bson.M{
-            "$in": data.Recipename,
-        },
-        "ethnicity": bson.M{
-            "$in": data.Ethnicity,
-        },
-        "method": bson.M{
-            "$in": data.Method,
-        },
-        "time": bson.M{
-            "$in": data.Time,
-        },
+
+    var recipename = appendToQuery(data.Recipename)
+
+    var ethnicity = appendToQuery(data.Ethnicity)
+
+    var method = appendToQuery(data.Method)
+
+    var time = appendToQueryInt(data.Time)
+
+    result := bson.M{}
+
+    if len(data.Recipename) != 0 {
+        result["recipename"] = bson.M{"$in":recipename}
     }
 
-    // if data.Ethnicity != "" {
-    //     result["ethnicity"] = data.Ethnicity
-    // }
+    if len(data.Ethnicity) != 0 {
+        result["ethnicity"] = bson.M{"$in": ethnicity}
+    }
+
+    if len(data.Method) != 0 {
+        result["method"] = bson.M{"$in": method}
+    }
+
+    if len(data.Time) != 0 {
+        result["time"] = bson.M{"$in": time}
+    }
     return result
 }

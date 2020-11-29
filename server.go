@@ -210,7 +210,7 @@ func getRecipes(w http.ResponseWriter, r *http.Request){
 	} else {
 
 		searchRecipe := util.Queryify(data)
-		fmt.Println(searchRecipe)
+
 		returnedRecipes, err := allRecipes.Find(ctx,searchRecipe)
 		var allRecipesParsed []bson.M
 		if err = returnedRecipes.All(ctx, &allRecipesParsed); err != nil {
