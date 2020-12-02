@@ -4,9 +4,9 @@ import axios from 'axios'
 const FilterForm = ({ updateRecipes }) => {
   const [filter, setFilter] = useState({ RecipeKey: 'get all' })
 
-  const [checkedEthnicity, setCheckedEthnicity] = useState()
-  const [checkedRecipename, setCheckedRecipename] = useState()
-  const [checkedTime, setCheckedTime] = useState()
+  const [checkedEthnicity, setCheckedEthnicity] = useState({})
+  const [checkedRecipename, setCheckedRecipename] = useState({})
+  const [checkedTime, setCheckedTime] = useState({})
 
   const [tags, setTags] = useState([])
 
@@ -18,7 +18,8 @@ const FilterForm = ({ updateRecipes }) => {
     fetchingTags()
   }, [])
 
-  console.log(tags)
+
+  console.log(checkedEthnicity)
   return (
     <form onSubmit={(event) => updateRecipes(filter)}>
       {tags[0] ? (
@@ -30,8 +31,23 @@ const FilterForm = ({ updateRecipes }) => {
                 {cur}
                 <input
                   name="Ethnicity"
-                  checked={checkedEthnicity === inx}
-                  onChange={() => setCheckedEthnicity(inx)}
+                  onChange={() => {
+                    if (checkedEthnicity[cur]) {
+                      setCheckedEthnicity((ethnicities) => {
+                        const cloneEthnicities = {...ethnicities}
+                        delete cloneEthnicities[cur]
+                        return cloneEthnicities
+                      })
+                    }
+                    else{
+                      console.log('this is hit')
+                      setCheckedEthnicity((ethnicities)=>{
+                        const cloneEthnicities={...ethnicities}
+                        cloneEthnicities[cur] = cur
+                        return cloneEthnicities
+                      })
+                    }
+                  }}
                   type="checkbox"
                 />
               </label>
@@ -44,7 +60,6 @@ const FilterForm = ({ updateRecipes }) => {
                 {cur}
                 <input
                   name="Recipename"
-                  checked={checkedRecipename === inx}
                   onChange={() => setCheckedRecipename(inx)}
                   type="checkbox"
                 />
@@ -56,14 +71,17 @@ const FilterForm = ({ updateRecipes }) => {
             return (
               <label key={inx}>
                 {cur}
-                <input name="time"
-                checked={checkedTime === inx}
-                onChange={() => setCheckedTime(inx)}type="checkbox" />
+                <input
+                  name="time"
+                  onChange={() => setCheckedTime(inx)}
+                  type="checkbox"
+                />
               </label>
             )
           })}
         </div>
       ) : null}
+      <input type="submit" value="Submit" />
     </form>
   )
 }
