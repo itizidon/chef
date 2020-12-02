@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
 const FilteredRecipes = ({ displayRecipes }) =>{
-  console.log(displayRecipes)
   return (
     <div>
       {displayRecipes? displayRecipes.map((cur,ind)=>{
@@ -14,7 +13,7 @@ const FilteredRecipes = ({ displayRecipes }) =>{
           </p>
           </div>
         )
-      }):null}
+      }):<div>No recipes with this combo</div>}
     </div>
   )
 }

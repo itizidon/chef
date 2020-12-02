@@ -19,12 +19,12 @@ const AllRecipes = (props) => {
         'http://localhost:8080/getRecipes',
         recipes
       )
+      console.log("this is hit making calls" )
       setAllData(data)
     }
     fetchingData()
 
-  }, [])
-
+  }, [recipes])
   return (
     <div>
       <div>All Recipes</div>

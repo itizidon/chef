@@ -18,10 +18,32 @@ const FilterForm = ({ updateRecipes }) => {
     fetchingTags()
   }, [])
 
+  const submitHandler = (e) => {
+    e.preventDefault()
 
-  console.log(checkedEthnicity)
+    let recipes = Object.keys(checkedRecipename)
+    let ethnicities = Object.keys(checkedEthnicity)
+    let times = Object.keys(checkedTime)
+    let finalQuery = {RecipeKey: 'get all'}
+
+    if(recipes.length!==0){
+      finalQuery.Recipename = recipes
+      delete finalQuery.RecipeKey
+    }
+    if(ethnicities.length!==0){
+      finalQuery.Ethnicity = ethnicities
+      delete finalQuery.RecipeKey
+    }
+    if(times.length!==0){
+      finalQuery.Time = times
+      delete finalQuery.RecipeKey
+    }
+
+    updateRecipes(finalQuery)
+  }
+
   return (
-    <form onSubmit={(event) => updateRecipes(filter)}>
+    <form onSubmit={(e) => submitHandler(e)}>
       {tags[0] ? (
         <div>
           <h6>Ethnicity</h6>
@@ -34,15 +56,13 @@ const FilterForm = ({ updateRecipes }) => {
                   onChange={() => {
                     if (checkedEthnicity[cur]) {
                       setCheckedEthnicity((ethnicities) => {
-                        const cloneEthnicities = {...ethnicities}
+                        const cloneEthnicities = { ...ethnicities }
                         delete cloneEthnicities[cur]
                         return cloneEthnicities
                       })
-                    }
-                    else{
-                      console.log('this is hit')
-                      setCheckedEthnicity((ethnicities)=>{
-                        const cloneEthnicities={...ethnicities}
+                    } else {
+                      setCheckedEthnicity((ethnicities) => {
+                        const cloneEthnicities = { ...ethnicities }
                         cloneEthnicities[cur] = cur
                         return cloneEthnicities
                       })
@@ -60,7 +80,22 @@ const FilterForm = ({ updateRecipes }) => {
                 {cur}
                 <input
                   name="Recipename"
-                  onChange={() => setCheckedRecipename(inx)}
+                  onChange={() => {
+                    if (checkedRecipename[cur]) {
+                      setCheckedRecipename((recipename) => {
+                        const cloneRecipenames = { ...recipename }
+                        delete cloneRecipenames[cur]
+                        return cloneRecipenames
+                      })
+                    } else {
+                      console.log('this is hit')
+                      setCheckedRecipename((recipename) => {
+                        const cloneRecipename = { ...recipename }
+                        cloneRecipename[cur] = cur
+                        return cloneRecipename
+                      })
+                    }
+                  }}
                   type="checkbox"
                 />
               </label>
@@ -73,7 +108,22 @@ const FilterForm = ({ updateRecipes }) => {
                 {cur}
                 <input
                   name="time"
-                  onChange={() => setCheckedTime(inx)}
+                  onChange={() => {
+                    if (checkedTime[cur]) {
+                      setCheckedTime((times) => {
+                        const cloneTime = { ...times }
+                        delete cloneTime[cur]
+                        return cloneTime
+                      })
+                    } else {
+                      console.log('this is hit')
+                      setCheckedTime((times) => {
+                        const cloneTime = { ...times }
+                        cloneTime[cur] = cur
+                        return cloneTime
+                      })
+                    }
+                  }}
                   type="checkbox"
                 />
               </label>
