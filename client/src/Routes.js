@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import Home from './components/Home'
 import AllRecipes from './components/AllRecipes'
+import AllOptions from './components/AllOptions'
 
 export default function Routes() {
   return (
@@ -21,6 +22,9 @@ export default function Routes() {
             <li>
               <Link to="/recipes">Recipes</Link>
             </li>
+            <li>
+              <Link to="/allOptions">All Options</Link>
+            </li>
           </ul>
         </nav>
 
@@ -33,8 +37,8 @@ export default function Routes() {
           <Route path="/users">
             <Users />
           </Route>
-          <Route path="/recipes">
-            <AllRecipes />
+          <Route path="/allOptions">
+            <AllOptions />
           </Route>
           <Route path="/">
             <Home />

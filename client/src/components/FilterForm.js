@@ -46,7 +46,7 @@ const FilterForm = ({ updateRecipes }) => {
     <form onSubmit={(e) => submitHandler(e)}>
       {tags[0] ? (
         <div>
-          <h6>Ethnicity</h6>
+          <h6 className="filter">Ethnicity</h6>
           {tags[0].ethnicity.map((cur, inx) => {
             return (
               <label key={inx}>
@@ -73,7 +73,7 @@ const FilterForm = ({ updateRecipes }) => {
               </label>
             )
           })}
-          <h6>Recipe</h6>
+          <h6 className="filter">Recipe</h6>
           {tags[0].recipename.map((cur, inx) => {
             return (
               <label key={inx}>
@@ -101,7 +101,7 @@ const FilterForm = ({ updateRecipes }) => {
               </label>
             )
           })}
-          <h6>Time</h6>
+          <h6 className="filter">Time</h6>
           {tags[0].time.map((cur, inx) => {
             return (
               <label key={inx}>
