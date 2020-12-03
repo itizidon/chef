@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import Home from './components/Home'
 import AllRecipes from './components/AllRecipes'
 import AllOptions from './components/AllOptions'
+import SingleRecipe from './components/SingleRecipe'
 
 export default function Routes() {
   return (
@@ -39,6 +40,9 @@ export default function Routes() {
           </Route>
           <Route path="/allOptions">
             <AllOptions />
+          </Route>
+          <Route path="/user/:id">
+            <SingleRecipe></SingleRecipe>
           </Route>
           <Route path="/">
             <Home />
