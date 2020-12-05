@@ -15,10 +15,10 @@ const SingleRecipe = (props) => {
       <Modal show={show} handleClose={handleClose}>
         <input
           type="tel"
-          inputmode="numeric"
+          inputMode="numeric"
           pattern="[0-9\s]{13,19}"
-          autocomplete="cc-number"
-          maxlength="19"
+          autoComplete="cc-number"
+          maxLength="19"
           placeholder="xxxx xxxx xxxx xxxx"
         ></input>
       </Modal>
@@ -30,7 +30,6 @@ const SingleRecipe = (props) => {
       >
         Order Recipe
       </button>
-      <p1>Reviews</p1>
     </div>
   )
 }

@@ -108,6 +108,7 @@ func main() {
 	r.HandleFunc("/newUser",newUserHandler).Methods("POST")
 	r.HandleFunc("/createRecipe", newRecipe).Methods("POST")
 	r.HandleFunc("/getTags", getTags).Methods("GET")
+	r.HandleFunc("/getUser", getUser).Methods("GET")
 	http.Handle("/", r)
 
 	ch := gohandlers.CORS(
@@ -264,4 +265,36 @@ func getTags (w http.ResponseWriter, r *http.Request){
     panic(err)
 	}
 	json.NewEncoder(w).Encode(showsWithInfo)
+}
+
+func getUser(w http.ResponseWriter, r *http.Request){
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017/chef-project"))
+	defer func() {
+    if err = client.Disconnect(ctx); err != nil {
+        panic(err)
+    }
+	}()
+
+	ctx, cancel = context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	err = client.Ping(ctx, readpref.Primary())
+
+	database := client.Database("chef-project")
+	usersCollection := database.Collection("users")
+	var data User
+	json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	foundUser, err := usersCollection.Find(ctx,bson.M{})
+	var foundUserParsed []bson.M
+	if err = foundUser.All(ctx, &foundUserParsed); err != nil {
+		log.Fatal(err)
+	}
+
+	json.NewEncoder(w).Encode(foundUserParsed)
 }

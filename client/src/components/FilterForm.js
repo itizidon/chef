@@ -3,7 +3,6 @@ import axios from 'axios'
 
 const FilterForm = ({ updateRecipes }) => {
   const [filter, setFilter] = useState({ RecipeKey: 'get all' })
-
   const [checkedEthnicity, setCheckedEthnicity] = useState({})
   const [checkedRecipename, setCheckedRecipename] = useState({})
   const [checkedTime, setCheckedTime] = useState({})
